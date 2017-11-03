@@ -2,82 +2,107 @@
 
 import pytest
 from pyramid.testing import DummyRequest
-from pyramid.response import Response
+from pyramid.exceptions import HTTPNotFound
 
 
 @pytest.fixture
 def dummy_req():
-    """Create a dummy GET request."""
+    """Make a dummy GET request."""
     return DummyRequest()
 
 
-def test_list_view_returns_response(dummy_req):
-    """Test that the list view returns a Response."""
+def test_list_view_returns_list_of_entries_in_dict(dummy_req):
+    """Test list view returns a list of all the entries as dicts."""
     from learning_journal.views.default import list_view
-    assert isinstance(list_view(dummy_req), Response)
+    response = list_view(dummy_req)
+    assert 'entries' in response
+    assert isinstance(response['entries'], list)
 
 
-def test_list_view_respondes_with_200_status_code(dummy_req):
-    """Test that the list view responds with the proper 200 status code."""
-    from learning_journal.views.default import list_view
-    assert list_view(dummy_req).status_code == 200
-
-
-def test_list_view_has_proper_content(dummy_req):
-    """Test that the list view Response has proper content."""
-    from learning_journal.views.default import list_view
-    assert 'Blog</title>' in list_view(dummy_req).text
-
-
-def test_detail_view_returns_response(dummy_req):
-    """Test that the detail view returns a Response."""
+def test_detail_view_returns_details_of_entry_in_dict(dummy_req):
+    """Test detail view returns the details of one entry as dict."""
     from learning_journal.views.default import detail_view
-    assert isinstance(detail_view(dummy_req), Response)
+    dummy_req.matchdict['id'] = 1
+    response = detail_view(dummy_req)
+    assert 'entry' in response
+    assert isinstance(response['entry'], dict)
 
 
-def test_detail_view_respondes_with_200_status_code(dummy_req):
-    """Test that the detail view responds with the proper 200 status code."""
+def test_detail_view_raises_httpnotfound_for_invalid_id(dummy_req):
+    """Test detail view raises HTTPNotFound for invalid id."""
     from learning_journal.views.default import detail_view
-    assert detail_view(dummy_req).status_code == 200
+    dummy_req.matchdict['id'] = -1
+    with pytest.raises(HTTPNotFound):
+        detail_view(dummy_req)
 
 
-def test_detail_view_has_proper_content(dummy_req):
-    """Test that the detail view Response has proper content."""
-    from learning_journal.views.default import detail_view
-    assert 'Detail</title>' in detail_view(dummy_req).text
-
-
-def test_create_view_returns_response(dummy_req):
-    """Test that the create view returns a Response."""
+def test_create_view_returns_empty_dict(dummy_req):
+    """Test create view returns an empty dict."""
     from learning_journal.views.default import create_view
-    assert isinstance(create_view(dummy_req), Response)
+    response = create_view(dummy_req)
+    assert not response
+    assert isinstance(response, dict)
 
 
-def test_create_view_respondes_with_200_status_code(dummy_req):
-    """Test that the create view responds with the proper 200 status code."""
-    from learning_journal.views.default import create_view
-    assert create_view(dummy_req).status_code == 200
-
-
-def test_create_view_has_proper_content(dummy_req):
-    """Test that the create view Response has proper content."""
-    from learning_journal.views.default import create_view
-    assert 'Form</title>' in create_view(dummy_req).text
-
-
-def test_update_view_returns_response(dummy_req):
-    """Test that the update view returns a Response."""
+def test_update_view_returns_current_details_of_entry_in_dict(dummy_req):
+    """Test update view returns the current details of one entry as dict."""
     from learning_journal.views.default import update_view
-    assert isinstance(update_view(dummy_req), Response)
+    dummy_req.matchdict['id'] = 1
+    response = update_view(dummy_req)
+    assert 'entry' in response
+    assert isinstance(response['entry'], dict)
 
 
-def test_update_view_respondes_with_200_status_code(dummy_req):
-    """Test that the update view responds with the proper 200 status code."""
+def test_update_view_raises_httpnotfound_for_invalid_id(dummy_req):
+    """Test update view raises HTTPNotFound for invalid id."""
     from learning_journal.views.default import update_view
-    assert update_view(dummy_req).status_code == 200
+    dummy_req.matchdict['id'] = -1
+    with pytest.raises(HTTPNotFound):
+        update_view(dummy_req)
 
 
-def test_update_view_has_proper_content(dummy_req):
-    """Test that the update view Response has proper content."""
-    from learning_journal.views.default import update_view
-    assert '<body>' not in update_view(dummy_req).text
+@pytest.fixture
+def testapp():
+    """Create a copy of the WSGI app for testing purposes."""
+    from webtest import TestApp
+    from pyramid.config import Configurator
+
+    def main():
+        config = Configurator()
+        config.include('pyramid_jinja2')
+        config.include('.routes')
+        config.scan()
+        return config.make_wsgi_app()
+
+    app = main()
+    return TestApp(app)
+
+
+def test_home_route_has_all_entries(testapp):
+    """Test that the page on the home route has all journal entries."""
+    from learning_journal.data.entry_history import ENTRIES
+    response = testapp.get('/')
+    assert len(ENTRIES) == len(response.html.find_all('hr')) - 1
+
+
+def test_detail_route_has_one_entry(testapp):
+    """Test that the page on the detail route has one journal entry."""
+    from learning_journal.data.entry_history import ENTRIES
+    response = testapp.get('/journal/1')
+    assert 1 == len(response.html.find_all('h2'))
+    assert ENTRIES[-1]['title'] in str(response.html.find_all('h2')[0])
+
+
+def test_create_route_has_empty_form(testapp):
+    """Test that the page on the create route has empty form."""
+    response = testapp.get('/journal/new-entry')
+    assert 1 == len(response.html.find_all('form'))
+    assert 0 == len(response.html.find_all(value='value'))
+
+
+def test_update_route_has_filled_form(testapp):
+    """Test that the page on the update route has filled form."""
+    from learning_journal.data.entry_history import ENTRIES
+    response = testapp.get('/journal/1/edit-entry')
+    assert 1 == len(response.html.find_all('form'))
+    assert ENTRIES[-1]['title'] in str(response.html.find_all('input')[0])
