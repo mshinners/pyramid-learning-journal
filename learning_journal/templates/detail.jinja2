@@ -1,0 +1,16 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+    <div class="post-preview">
+      <h2 class="post-title">
+        {{ entry.title }}
+      </h2>
+      <p class="post-meta">Posted on {{ entry.creation_date }}</p>
+    </div>
+    <div>
+      {{ entry.body | safe }}
+    </div>
+    <div class="clearfix">
+      <a class="btn btn-primary float-right" href="{{ request.route_url('update', id=entry.id) }}">&uarr; Edit</a>
+    </div>
+{% endblock content %}
