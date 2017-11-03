@@ -1,72 +1,15 @@
-{% extends "base.jinja2" %}
+{% extends 'base.jinja2' %}
 
 {% block content %}
-
-<!-- Grid -->
-<div class="w3-row">
-
-<!-- Blog entries -->
-<div class="w3-col l8 s12">
-  <!-- Blog entry -->
-  <div class="w3-card-4 w3-margin w3-white">
-    <img>
-    <div class="w3-container">
-      <h3><b>Tech Blog</b></h3>
-      <h5>This is my 2nd blog post.<span class="w3-opacity">October 29, 2017</span></h5>
+  {% for entry in entries %}
+    <div class="post-preview">
+      <a href="{{ request.route_url('detail', id=entry.id ) }}">
+        <h2 class="post-title">
+          {{ entry.title }}
+        </h2>
+      </a>
+      <p class="post-meta">Posted on {{ entry.creation_date }}</p>
     </div>
-
-    <div class="w3-container">
-      <p>This is the second post in my tech blog. I still have no idea what I am going to be writing about.</p>
-      <div class="w3-row">
-        <div class="w3-col m8 s12">
-          <p><a href="/journal/1"><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></a></p>
-        </div>
-        <div class="w3-col m4 w3-hide-small">
-        </div>
-      </div>
-    </div>
-  </div>
-  <hr>
-
-  <!-- Blog entry -->
-  <div class="w3-card-4 w3-margin w3-white">
-  <img>
-    <div class="w3-container">
-      <h3><b>The Wonders of Technology</b></h3>
-      <h5>This is my first blog post. <span class="w3-opacity">October 28, 2017</span></h5>
-    </div>
-
-    <div class="w3-container">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. 
-      .</p>
-      <div class="w3-row">
-        <div class="w3-col m8 s12">
-          <p><a href="/journal/2"><button class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></button></a></p>
-        </div>
-        <div class="w3-col m4 w3-hide-small">
-        </div>
-      </div>
-    </div>
-  </div>
-<!-- END BLOG ENTRIES -->
-</div>
-
-<!-- Introduction menu -->
-<div class="w3-col l4">
-  <!-- About Card -->
-  <div class="w3-card w3-margin w3-margin-top">
-  <img src="/w3images/avatar_g.jpg" style="width:100%">
-    <div class="w3-container w3-white">
-      <h4><b>Michael Shinners</b></h4>
-      <p>This is about me. My life and experiences while I am learning code.</p>
-    </div>
-  </div><hr>
-    
-<!-- END Introduction Menu -->
-</div>
-
-<!-- END GRID -->
-</div><br>
-
-{% endblock %}
+    <hr>
+  {% endfor %}
+{% endblock content %}
