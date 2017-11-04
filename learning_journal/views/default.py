@@ -19,9 +19,12 @@ def detail_view(request):
     """A single journal entry."""
     entry_id = int(request.matchdict['id'])
     entry = request.dbsession.query(Entry).get(entry_id)
-    return {
-        "entry": entry
-    }
+    if entry is None:
+        raise HTTPNotFound
+    else:
+        return {
+            "entry": entry
+        }
 
 
 @view_config(route_name='create', renderer='learning_journal:templates/create.jinja2')
@@ -35,6 +38,9 @@ def update_view(request):
     """Update an existing entry."""
     entry_id = int(request.matchdict['id'])
     entry = request.dbsession.query(Entry).get(entry_id)
-    return {
-        "entry": entry
-    }
+    if entry is None:
+        raise HTTPNotFound
+    else:
+        return {
+            "entry": entry
+        }
