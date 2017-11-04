@@ -1,13 +1,16 @@
 from pyramid.view import view_config
 from learning_journal.data import entry_history
 from pyramid.exceptions import HTTPNotFound
+from learning_journal.models import Entry
 
 
 @view_config(route_name='home', renderer='learning_journal:templates/list.jinja2')
 def list_view(request):
     """List of journal entries."""
+    entries = request.dbsession.query(Entry).all()
+    entries = [entry.to_dict() for entry in entries]
     return {
-        'entries': sorted(entry_history.ENTRIES, key=lambda e: -e['id'])
+        "entries": entries
     }
 
 
@@ -15,11 +18,9 @@ def list_view(request):
 def detail_view(request):
     """A single journal entry."""
     entry_id = int(request.matchdict['id'])
-    if entry_id < 0 or entry_id > len(entry_history.ENTRIES):
-        raise HTTPNotFound
-    entry = list(filter(lambda entry: entry['id'] == entry_id, entry_history.ENTRIES))[0]
+    entry = request.dbsession.query(Entry).get(entry_id)
     return {
-        'entry': entry
+        "entry": entry
     }
 
 
@@ -33,9 +34,7 @@ def create_view(request):
 def update_view(request):
     """Update an existing entry."""
     entry_id = int(request.matchdict['id'])
-    if entry_id < 0 or entry_id > len(entry_history.ENTRIES):
-        raise HTTPNotFound
-    entry = list(filter(lambda entry: entry['id'] == entry_id, entry_history.ENTRIES))[0]
+    entry = request.dbsession.query(Entry).get(entry_id)
     return {
-        'entry': entry
+        "entry": entry
     }

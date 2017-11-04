@@ -22,6 +22,7 @@ class Entry(Base):
     def __init__(self, *args, creation_date=None, **kwargs):
         """Initialize a new journal entry with the current date & time."""
         super(Entry, self).__init__(*args, **kwargs)
+        self.creation_date = creation_date
         if not creation_date:
             self.creation_date = datetime.now()
 
