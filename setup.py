@@ -55,7 +55,7 @@ setup(
             'main = learning_journal:main',
         ],
         'console_scripts': [
-            'initdb = learning_journal.scripts.initializedb:main',
+            'initdb2 = learning_journal.scripts.initializedb:main',
         ],
     },
 )

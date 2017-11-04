@@ -16,7 +16,8 @@ from ..models import (
     get_session_factory,
     get_tm_session,
 )
-from ..models import YOURMODEL
+from ..models import Entry
+from ..data.entry_history import ENTRIES
 
 
 def usage(argv):
@@ -43,4 +44,14 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-        #add your models to the db here
+
+        all_entries = []
+        for entry in ENTRIES:
+            all_entries.append(
+                Entry(
+                    title=entry['title'],
+                    body=entry['body'],
+                    creation_date=entry['creation_date']
+                )
+            )
+        dbsession.add_all(all_entries)
