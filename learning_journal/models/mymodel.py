@@ -2,17 +2,35 @@ from sqlalchemy import (
     Column,
     Index,
     Integer,
-    Text,
+    Unicode,
+    DateTime,
 )
 
 from .meta import Base
+from datetime import datetime
 
 
-class MyModel(Base):
-    __tablename__ = 'models'
+class Entry(Base):
+    """Create a model for new journal entries."""
+
+    __tablename__ = 'entries'
     id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Integer)
+    title = Column(Unicode)
+    body = Column(Unicode)
+    creation_date = Column(DateTime)
 
+    def __init__(self, creation_date=None, *args, **kwargs):
+        """Initialize a new journal entry with the current date & time."""
+        super(Entry, self).__init__(*args, **kwargs)
+        self.creation_date = creation_date
+        if not creation_date:
+            self.creation_date = datetime.now()
 
-Index('my_index', MyModel.name, unique=True, mysql_length=255)
+    def to_dict(self):
+        """Take all model attributes and render them as a dictionary."""
+        return {
+            'id': self.id,
+            'title': self.title,
+            'body': self.body,
+            'creation_date': self.creation_date.strftime('%A, %B %d, %Y at %I:%M%p')
+        }

@@ -9,7 +9,9 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
 requires = [
+    'faker',
     'plaster_pastedeploy',
+    'psycopg2',
     'pyramid >= 1.9a',
     'pyramid_debugtoolbar',
     'pyramid_jinja2',
@@ -54,7 +56,7 @@ setup(
             'main = learning_journal:main',
         ],
         'console_scripts': [
-            'initialize_learning_journal_db = learning_journal.scripts.initializedb:main',
+            'initdb2 = learning_journal.scripts.initializedb:main',
         ],
     },
 )

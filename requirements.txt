@@ -1,11 +1,11 @@
 hupper==1.0
 Jinja2==2.9.6
--e git+https://github.com/mshinners/pyramid-learning-journal.git@d28299e8d4089c20a7e4a6620ee7862f8e129fb0#egg=learning_journal
 Mako==1.0.7
 MarkupSafe==1.0
 PasteDeploy==1.5.2
 plaster==1.0
 plaster-pastedeploy==0.4.1
+psycopg2==2.7.3.2
 Pygments==2.2.0
 pyramid==1.9.1
 pyramid-debugtoolbar==4.3
