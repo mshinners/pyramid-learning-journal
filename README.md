@@ -11,8 +11,8 @@ Deployed on Heroku: https://gory-vault-94923.herokuapp.com/
 
 ## Tests
 6 unit tests
-1 functional test
-All tests pass, with 100% coverage.
+4 functional tests
+All tests pass, with 100% coverage in Python 2 & 3.
 
 ## Architecture
 Written in Python, with pytest for testing. Uses the web framework Pyramid with a scaffold built with the Cookiecutter pyramid-cookiecutter-alchemy. Deployed with Heroku.
