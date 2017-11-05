@@ -7,6 +7,18 @@ FTM = '%Y-%m-%d%Z%H:%M:%S.%f'
 
 ENTRIES = [
     {
+    'title': "The Fifteenth Day",
+    'id': 15,
+    'body': "<p>I HAD AN AMAZING BREAKTHROUGH TODAY WITH DATA STRUCTURES!! It was as if the coulds had parted and the rays of the sun had shown down upon me. In a conversation with Megan, she explained things and I asked certain questions and I started piecing the parts together.I then went to the whiteboard and was able to write a bunch of stuff on the wall. I started drawing a diagram, then pseudo-coding then actual code. I asked a TA to consult me on my findings. He agreed with the way I had it and That was a great affirmation. I by no means can write a data structure solo (yet), but I feel like such a leap in growth has been made today. I also continue to cultivate my whole database knowledge. She is very patient with me and helps me with understanding the steps. I was a good, long, exhausting, butt-kicking day, but I call it a win!</p>",
+    'creation_date': datetime.strptime("2017-11-04UTC06:55:36.727517", FTM)
+    },
+    {
+    'title': "The Fourteenth Day",
+    'id': 14,
+    'body': "<p>We learned a little bit about graphs today. I learned more about testing and feel better about compiling tests and running some basic terminal code that I have been struggling with on a daily basis. I am hitting a burn out point right now, with continuous 16-17 hour days. I hope I will be able to get a little recuperative rest this weekend. But I also know that I will be on campus for a good portion of Saturday, so not sure how that'll fare.</p>",
+    'creation_date': datetime.strptime("2017-11-03UTC04:33:51.033633", FTM)
+    },
+    {
     'title': "...day the 13th",
     'id': 13,
     'body': "<p>today was a interesting. I learned about yet another new data structure, but really didn't have any time to devote to learn much about it, as most of lab time was trying to get the past 2 day's stuff working and then spending a lot of time on the Pyramid stuff. Getting the Learning Journal set-up is quite the challenging task.</p>",

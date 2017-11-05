@@ -1,6 +1,5 @@
 from pyramid.view import view_config
-from learning_journal.data import entry_history
-from pyramid.exceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from learning_journal.models import Entry
 
 
@@ -8,6 +7,7 @@ from learning_journal.models import Entry
 def list_view(request):
     """List of journal entries."""
     entries = request.dbsession.query(Entry).all()
+    entries = sorted(entries, key=lambda e: e.creation_date, reverse=True)
     entries = [entry.to_dict() for entry in entries]
     return {
         "entries": entries
@@ -30,7 +30,18 @@ def detail_view(request):
 @view_config(route_name='create', renderer='learning_journal:templates/create.jinja2')
 def create_view(request):
     """Create a new entry."""
-    return {}
+    if request.method == "GET":
+        return {}
+
+    if request.method == "POST":
+        if not all([field in request.POST for field in ['title', 'body']]):
+            raise HTTPBadRequest
+        new_entry = Entry(
+            title=request.POST['title'],
+            body=request.POST['body'],
+        )
+        request.dbsession.add(new_entry)
+        return HTTPFound(request.route_url('home'))
 
 
 @view_config(route_name='update', renderer='learning_journal:templates/edit.jinja2')
@@ -38,9 +49,16 @@ def update_view(request):
     """Update an existing entry."""
     entry_id = int(request.matchdict['id'])
     entry = request.dbsession.query(Entry).get(entry_id)
-    if entry is None:
+    if not entry:
         raise HTTPNotFound
-    else:
+    if request.method == "GET":
         return {
-            "entry": entry
+            'title': 'Edit Entry',
+            'entry': entry.to_dict()
         }
+    if request.method == "POST":
+        entry.title = request.POST['title']
+        entry.body = request.POST['body']
+        request.dbsession.add(entry)
+        request.dbsession.flush()
+        return HTTPFound(request.route_url('detail', id=entry.id))
