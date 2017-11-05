@@ -120,7 +120,7 @@ def test_update_view_returns_current_details_of_entry_in_dict(dummy_req):
     dummy_req.matchdict['id'] = 1
     response = update_view(dummy_req)
     assert 'entry' in response
-    assert isinstance(response['entry'], Entry)
+    assert isinstance(response['entry'], dict)
 
 
 def test_update_view_raises_httpnotfound_for_invalid_id(dummy_req):
