@@ -193,6 +193,13 @@ def test_create_route_has_empty_form(testapp):
     assert 0 == len(response.html.find_all(value='value'))
 
 
+# def test_create_adds_new_entry_to_list(testapp):
+#     """Test that create function adds a new entry properly."""
+#     response = testapp.get('/journal/new-entry')
+#     assert 1 == len(response.html.find_all('form'))
+#     assert 0 == len(response.html.find_all(value='value'))
+
+
 def test_detail_route_has_one_entry(testapp):
     """Test that the page on the detail route has one journal entry."""
     response = testapp.get('/journal/1')
@@ -205,3 +212,10 @@ def test_update_route_has_filled_form(testapp):
     response = testapp.get('/journal/1/edit-entry')
     assert 1 == len(response.html.find_all('form'))
     assert 'title #0' in str(response.html.find('input'))
+
+
+# def test_update_does_update_an_existing_entry(testapp):
+#     """Test that the update function correctly updates the original."""
+#     response = testapp.get('/journal/1/edit-entry')
+#     assert 1 == len(response.html.find_all('form'))
+#     assert '
