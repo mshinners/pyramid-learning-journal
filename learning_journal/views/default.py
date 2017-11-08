@@ -1,6 +1,11 @@
+"""Set up the default functions for the various views in my app."""
+
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from learning_journal.models import Entry
+from pyramid.security import remember, forget, NO_PERMISSION_REQUIRED
+from learning_journal.security import is_authenticated
 
 
 @view_config(route_name='home', renderer='learning_journal:templates/list.jinja2')
@@ -27,7 +32,11 @@ def detail_view(request):
         }
 
 
-@view_config(route_name='create', renderer='learning_journal:templates/create.jinja2')
+@view_config(
+    route_name='create',
+    renderer='learning_journal:templates/create.jinja2',
+    permission='secret'
+)
 def create_view(request):
     """Create a new entry."""
     if request.method == "GET":
@@ -44,7 +53,11 @@ def create_view(request):
         return HTTPFound(request.route_url('home'))
 
 
-@view_config(route_name='update', renderer='learning_journal:templates/edit.jinja2')
+@view_config(
+    route_name='update',
+    renderer='learning_journal:templates/edit.jinja2',
+    permission='secret'
+)
 def update_view(request):
     """Update an existing entry."""
     entry_id = int(request.matchdict['id'])
@@ -62,3 +75,32 @@ def update_view(request):
         request.dbsession.add(entry)
         request.dbsession.flush()
         return HTTPFound(request.route_url('detail', id=entry.id))
+
+
+@view_config(
+    route_name='login',
+    renderer='learning_journal:templates/edit.jinja2',
+    permission=NO_PERMISSION_REQUIRED
+)
+def login(request):
+    """Establish login post method."""
+    if request.authenticated_userid:
+        return HTTPFound(request.route_url('home'))
+
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        if is_authenticated(username, password):
+            headers = remember(request, username)
+            return HTTPFound(request.route_url('home'), headers=headers)
+
+        return {
+            'error': 'Username/password combination not recognized.'
+        }
+
+
+@view_config(route_name='logout')
+def logout(request):
+    """Logout and send user to homepage."""
+    headers = forget(request)
+    return HTTPFound(request.route_url('home'), headers=headers)
