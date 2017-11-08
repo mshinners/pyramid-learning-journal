@@ -10,7 +10,7 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 
 requires = [
     'faker',
-    'passlib'
+    'passlib',
     'plaster_pastedeploy',
     'psycopg2',
     'pyramid >= 1.9a',
