@@ -4,7 +4,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from learning_journal.models import Entry
-from pyramid.security import remember, forget, NO_PERMISSION_REQUIRED
+from pyramid.security import remember, forget
 from learning_journal.security import is_authenticated
 
 
@@ -79,13 +79,15 @@ def update_view(request):
 
 @view_config(
     route_name='login',
-    renderer='learning_journal:templates/edit.jinja2',
-    permission=NO_PERMISSION_REQUIRED
+    renderer='learning_journal:templates/login.jinja2',
 )
 def login(request):
     """Establish login post method."""
     if request.authenticated_userid:
         return HTTPFound(request.route_url('home'))
+
+    if request.method == "GET":
+        return {"route": login}
 
     if request.method == "POST":
         username = request.POST['username']

@@ -24,39 +24,7 @@
   </head>
 
   <body>
-<div id='loginModal' class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Please Sign In</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form method="POST">
-        <div class="control-group">
-          <div class="form-group floating-label-form-group controls">
-            <label>Username:</label>
-            <input type="text" class="form-control" placeholder="Username" name="username">
-          </div>
-        </div>
-        <br>
-        <div class="control-group">
-          <div class="form-group floating-label-form-group controls">
-            <label>Password:</label>
-             <input type="password" class="form-control" placeholder="Password" name="password">
-          </div>
-        </div>
-        <br>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-      </form>
-      </div>
-    </div>
-  </div>
-</div>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
@@ -75,7 +43,7 @@
             </li>
             <li class='nav-item'><a class="nav-link" href="{{ request.route_url('logout') }}">Log Out</a></li>
             {% else %}
-            <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#loginModal" href="#">Log In</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ request.route_url('login') }}">Log In</a></li>
             {% endif %}
           </ul>
         </div>
@@ -153,7 +121,10 @@
 
     <!-- Custom scripts for this template -->
     <script src="{{ request.static_path('learning_journal:static/clean-blog.js') }}"></script>
+    {% if route %}
+    <script type="text/javascript">$(document).ready(function(){$('#loginModal').modal('show')})</script>
 
+    {% endif %}
   </body>
 
 </html>

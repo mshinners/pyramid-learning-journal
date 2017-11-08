@@ -1,0 +1,41 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+
+<div id='loginModal' class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Please Sign In</h5>
+        <a href="{{ request.route_url('home') }}">
+          <button type="button" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </a>
+      </div>
+      <div class="modal-body">
+      <form method="POST">
+        <div class="control-group">
+          <div class="form-group floating-label-form-group controls">
+            <label>Username:</label>
+            <input type="text" class="form-control" placeholder="Username" name="username">
+          </div>
+        </div>
+        <br>
+        <div class="control-group">
+          <div class="form-group floating-label-form-group controls">
+            <label>Password:</label>
+             <input type="password" class="form-control" placeholder="Password" name="password">
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
