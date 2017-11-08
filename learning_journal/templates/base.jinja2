@@ -37,9 +37,14 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ request.route_url('home') }}">Home</a>
             </li>
+            {% if request.authenticated_userid %}
             <li class="nav-item">
               <a class="nav-link" href="{{ request.route_url('create') }}">New Entry</a>
             </li>
+            <li class='nav-item'><a class="nav-link" href="{{ request.route_url('logout') }}">Log Out</a></li>
+            {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ request.route_url('login') }}">Log In</a></li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -116,7 +121,10 @@
 
     <!-- Custom scripts for this template -->
     <script src="{{ request.static_path('learning_journal:static/clean-blog.js') }}"></script>
+    {% if route %}
+    <script type="text/javascript">$(document).ready(function(){$('#loginModal').modal('show')})</script>
 
+    {% endif %}
   </body>
 
 </html>
