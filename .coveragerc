@@ -1,0 +1,8 @@
+[run]
+omit =
+    pyramid_learning_journal/test*
+    pyramid_learning_journal/__init__.py
+    pyramid_learning_journal/models/__init__.py
+    pyramid_learning_journal/models/meta.py
+    pyramid_learning_journal/scripts/__init__.py
+    pyramid_learning_journal/scripts/initializedb.py

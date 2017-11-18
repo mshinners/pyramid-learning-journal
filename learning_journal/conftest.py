@@ -1,13 +1,15 @@
-"""Fixtures for the pyramid_learning_journal tests."""
+"""Fixtures for learning_journal tests."""
 
 from __future__ import unicode_literals
 import pytest
 from pyramid import testing
-from pyramid_learning_journal.models.meta import Base
-from pyramid_learning_journal.models import Entry, get_tm_session
+from learning_journal.models.meta import Base
+from learning_journal.models import Entry, get_tm_session
 from passlib.apps import custom_app_context as pwd_context
 import transaction
 import os
+
+# pragma: no cover
 
 
 @pytest.fixture
@@ -133,7 +135,7 @@ def testapp_session(testapp, request):
     """Create session to interact with db."""
     SessionFactory = testapp.app.registry["dbsession_factory"]
     session = SessionFactory()
-    engine = session.bind
+    # engine = session.bind
 
     def teardown():
         session.transaction.rollback()

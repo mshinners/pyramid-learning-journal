@@ -5,6 +5,8 @@ import os
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+
+    # pragma: no cover
     settings['sqlalchemy.url'] = os.environ['DATABASE_URL']
     config = Configurator(settings=settings)
     config.include('pyramid_jinja2')
