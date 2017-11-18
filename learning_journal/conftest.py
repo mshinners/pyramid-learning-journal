@@ -30,7 +30,6 @@ def configuration(request):
 
     def teardown():
         testing.tearDown()
-
     request.addfinalizer(teardown)
     return config
 
@@ -46,7 +45,6 @@ def db_session(configuration, request):
     def teardown():
         session.transaction.rollback()
         Base.metadata.drop_all(engine)
-
     request.addfinalizer(teardown)
     return session
 
@@ -97,9 +95,7 @@ def testapp(request):
 
     def tearDown():
         Base.metadata.drop_all(bind=engine)
-
     request.addfinalizer(tearDown)
-
     return TestApp(app)
 
 
@@ -141,7 +137,6 @@ def testapp_session(testapp, request):
 
     def teardown():
         session.transaction.rollback()
-
     request.addfinalizer(teardown)
     return session
 
