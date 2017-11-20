@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from learning_journal.models import Entry
 from pyramid.security import remember, forget
 from learning_journal.security import is_authenticated
+from passlib.apps import custom_app_context as pwd_context
 
 
 @view_config(route_name='home', renderer='learning_journal:templates/list.jinja2')

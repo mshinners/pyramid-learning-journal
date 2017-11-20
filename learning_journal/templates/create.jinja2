@@ -5,6 +5,7 @@
 <p>What did I learn today?</p>
 
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
     <div class="control-group">
       <div class="form-group floating-label-form-group controls">
         <label>Title</label>

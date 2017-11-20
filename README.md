@@ -2,7 +2,7 @@
 
 **Author**: Michael Shinners
 
-**Version**: 1.0.4
+**Version**: 1.0.5
 
 ## Overview
 Blog created with Pyramid for recording a Learning Journal of Code 401: Python
