@@ -9,8 +9,6 @@ from passlib.apps import custom_app_context as pwd_context
 import transaction
 import os
 
-# pragma: no cover
-
 
 @pytest.fixture
 def test_entry():
